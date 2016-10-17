@@ -1,0 +1,47 @@
+.colorlink {
+        margin-top: 16px;
+        margin-right: 16px;
+        margin-bottom: 16px;
+        text-align: center;
+        
+
+}
+
+.main {
+        text-align: center;
+}
+
+.card {
+        display: inline-block;
+        float: left;
+        width:  210px;
+        height: 375px;
+        margin: 10px;
+}
+
+
+.cardinfo {
+
+
+        height: 50px;
+}
+
+.container {
+        max-width: 970;
+
+}
+
+.label {
+        margin-right: .5em;
+}
+
+#header {
+        display: inline;
+}
+
+#socialthings {
+        display: inline;
+        float: right;
+}
+
+
