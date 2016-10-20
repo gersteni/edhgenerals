@@ -17,6 +17,7 @@
 (define-values (site-dispatch site-url)
                (dispatch-rules
                  (("") main)
+                 (("about") about-page)
 
                  (("red-generals") red-gens)
                  (("green-generals") green-gens)
@@ -86,6 +87,8 @@
   (site-dispatch req))
 
 (define (main req) (make-index-page req))
+
+(define (about-page req) (make-about-page))
 
 (define (jund-gens req) (make-gen-page "JUND" req))
 (define (bant-gens req) (make-gen-page "BANT" req))
@@ -171,38 +174,70 @@
 
               )))))
 
+(define (make-about-page)
+
+
+  (response/xexpr 
+    `(html
+       (head
+        (title "About EDH Generals")      
+        (meta ((charset "utf-8")))
+
+         ;; using the viewport recommendation from https://developers.google.com/speed/docs/insights/ConfigureViewport
+         (meta ((name "viewport")
+                (content "width=device-width, initial-scale=1")))
+
+         (meta ((http-equiv "X-UA-Compatible")
+                (content "IE=edge")))
+
+         
+    
+
+         ;; removing sharethis stuff for now, it will better to have it on the bottom
+         ,insertbootstrap ;;,insertsharethis1 ,insertsharethis2
+
+         (link ((rel "stylesheet") (href "style.css")))
+
+         ,insertGA)
+
+       (body
+         (div ((class "container"))
+
+              (div ((class "row"))
+                   (div ((class "col-md-12"))
+                        (h1 ((id "header")) 
+                            "About EDH Generals")
+                        (p "The idea behind EDH Generals is simple - to provide a complete listing of all the generals / commanders for the EDH / Commander Magic The Gathering format. Every legendary creature and five planeswalkers are in the list, sorted by color identity.")
+                        (p "This website is run by Idoh Gersten, who has played MTG since 1995."))))))))
+
 
 
 (define (make-color-link1 a)
-  `(div ((class "col-md-2"))
-        (div ((class "colorlink"))
+  `(div ((class "colorlink"))
              (a ((href ,(string-append "/" a "-generals")))
                 (img ((src ,(string-append "/img/" a ".png"))))
                 (br)
-                ,(string-append a)))))
+                ,(string-append a))))
 
 (define (make-color-link2 a b)
-  `(div ((class "col-md-2"))
-        (div ((class "colorlink"))
+  `(div ((class "colorlink"))
              (a ((href ,(string-append "/" a "-" b "-generals")))
                 (img ((src ,(string-append "/img/" a ".png"))))
                 (img ((src ,(string-append "/img/" b ".png"))))
                 (br)
-                ,(string-append a "-" b)))))
+                ,(string-append a "-" b))))
 
 (define (make-color-link3 a b c)
-  `(div ((class "col-md-2"))
-        (div ((class "colorlink"))
+  `(div ((class "colorlink"))
              (a ((href ,(string-append "/" a "-" b "-" c "-generals")))
                 (img ((src ,(string-append "/img/" a ".png"))))
                 (img ((src ,(string-append "/img/" b ".png"))))
                 (img ((src ,(string-append "/img/" c ".png"))))
                 (br)
-                ,(string-append a "-" b "-" c)))))
+                ,(string-append a "-" b "-" c))))
 
 (define (make-color-link5)
-  `(div ((class "col-md-2"))
-        (div ((class "colorlink"))
+  `(div ((class "colorlink"))
              (a ((href "/rainbow-generals"))
                 (img ((src "/img/white.png")))
                 (img ((src "/img/blue.png")))
@@ -210,7 +245,7 @@
                 (img ((src "/img/red.png")))
                 (img ((src "/img/green.png")))
                 (br)
-                "rainbow"))))
+                "rainbow")))
 
 
 
@@ -242,65 +277,59 @@
                             (p "Every EDH General printed from Alpha to Kaladesh.")
                             (hr)))
 
-                  (div ((class "row")) (div ((class "col-md-12")) (h2 "Special Generals")))
-                  (div ((class "row")) (div ((class "col-md-12")) (p "Four color generals are coming in November. Stay tuned!")))
-                  (div ((class "row")) 
-
-                       (div ((class "col-md-4")) "")
-                       ,(make-color-link1 "colorless")
-                       ,(make-color-link5))
-
-                  (div ((class "row")) (div ((class "col-md-12")) (h2 "Monocolored")))
                   (div ((class "row"))
-                       (div ((class "col-md-1")) "")
-                       ,(make-color-link1 "white")
-                       ,(make-color-link1 "blue")
-                       ,(make-color-link1 "black")
-                       ,(make-color-link1 "red")
-                       ,(make-color-link1 "green"))
+                       (div ((class "col-md-12"))
+
+                            (br)
+                            
+                            ,(make-color-link1 "white")
+                            ,(make-color-link1 "blue")
+                            ,(make-color-link1 "black")
+                            ,(make-color-link1 "red")
+                            ,(make-color-link1 "green")
+
+                            (br)
+
+                            ,(make-color-link2 "white" "blue")
+                            ,(make-color-link2 "blue" "black")
+                            ,(make-color-link2 "black" "red")
+                            ,(make-color-link2 "red" "green")
+                            ,(make-color-link2 "green" "white")
+
+                            (br)
+
+                            ,(make-color-link2 "white" "black")
+                            ,(make-color-link2 "blue" "red")
+                            ,(make-color-link2 "black" "green")
+                            ,(make-color-link2 "red" "white")
+                            ,(make-color-link2 "green" "blue")
+
+                            (br)
+
+                            ,(make-color-link3 "green" "white" "blue")
+                            ,(make-color-link3 "white" "blue" "black")
+                            ,(make-color-link3 "blue" "black" "red")
+                            ,(make-color-link3 "black" "red" "green")
+                            ,(make-color-link3 "red" "green" "white")
+
+                            (br)
+
+                            ,(make-color-link3 "white" "black" "green")
+                            ,(make-color-link3 "blue" "red" "white")
+                            ,(make-color-link3 "black" "green" "blue")
+                            ,(make-color-link3 "red" "white" "black")
+                            ,(make-color-link3 "green" "blue" "red")
+
+                            (br)
+                            ,(make-color-link1 "colorless")
+                            ,(make-color-link5)
+
+                            ))
 
 
-                  (div ((class "row")) (div ((class "col-md-12")) (h2 "Allied")))
-
-                  (div ((class "row"))
-                       (div ((class "col-md-1")) "")
-                       ,(make-color-link2 "white" "blue")
-                       ,(make-color-link2 "blue" "black")
-                       ,(make-color-link2 "black" "red")
-                       ,(make-color-link2 "red" "green")
-                       ,(make-color-link2 "green" "white"))
-
-                  (div ((class "row")) (div ((class "col-md-12")) (h2 "Enemy")))
-
-                  (div ((class "row"))
-                       (div ((class "col-md-1")) "")
-                       ,(make-color-link2 "white" "black")
-                       ,(make-color-link2 "blue" "red")
-                       ,(make-color-link2 "black" "green")
-                       ,(make-color-link2 "red" "white")
-                       ,(make-color-link2 "green" "blue"))
 
 
-                  (div ((class "row")) (div ((class "col-md-12")) (h2 "Shard")))
 
-                  (div ((class "row"))
-                       (div ((class "col-md-1")) "")
-                       ,(make-color-link3 "green" "white" "blue")
-                       ,(make-color-link3 "white" "blue" "black")
-                       ,(make-color-link3 "blue" "black" "red")
-                       ,(make-color-link3 "black" "red" "green")
-                       ,(make-color-link3 "red" "green" "white"))
-
-                  (div ((class "row")) (div ((class "col-md-12")) (h2 "Wedge")))
-
-                  (div ((class "row"))
-
-                       (div ((class "col-md-1")) "")
-                       ,(make-color-link3 "white" "black" "green")
-                       ,(make-color-link3 "blue" "red" "white")
-                       ,(make-color-link3 "black" "green" "blue")
-                       ,(make-color-link3 "red" "white" "black")
-                       ,(make-color-link3 "green" "blue" "red"))
 
 
                   (div ((class "row"))
@@ -311,6 +340,7 @@
                             (a ((href "https://twitter.com/idoh")) "@idoh")
                             " and "
                             (a ((href "https://plus.google.com/+IdohGerstenx")) "Google+")
+                            " | " (a ((href "/about")) "About")
                             " | " (a ((href "https://github.com/gersteni")) "Site's source code")
                             " | " (a ((href "http://www.idoh.com")) "blog"))))))))
 
