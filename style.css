@@ -1,12 +1,23 @@
+.label > a {
+        color: #ffffff;
+}
+
+
 
 .colorlink {
         display: inline-block;
-        margin-top: 16px;
         margin-right: 16px;
         margin-bottom: 16px;
         
 
 }
+
+a > .colorlink > img {
+        margin-right: .5em;
+        margin-left: .5em;
+
+}
+
 
 .main {
         text-align: center;
@@ -33,7 +44,6 @@
 }
 
 .label {
-        margin-right: .5em;
 }
 
 #header {

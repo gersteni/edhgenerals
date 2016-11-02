@@ -34,5 +34,28 @@
            "stLight.options({publisher: \"3847deed-85ad-4cd3-8ecd-f274eb521635\", doNotHash: false, doNotCopy: false, hashAddressBar: false});"))
 
 
+(define charset `(meta ((charset "utf-8"))))
+
+(define viewport `(meta ((name "viewport")
+                         (content "width=device-width, initial-scale=1"))))
+
+(define http-equiv `(meta ((http-equiv "X-UA-Compatible")
+                           (content "IE=edge"))))
+
+(define stylesheet `(link ((rel "stylesheet") 
+                           (href "style.css"))))
+
+(define index-footer `(div ((class "row"))
+
+                           (div ((class "col-md-12"))
+                                (hr)
+                                "Say hi at  " 
+                                (a ((href "https://twitter.com/idoh")) "@idoh")
+                                " and "
+                                (a ((href "https://plus.google.com/+IdohGerstenx")) "Google+")
+                                " | " (a ((href "/about")) "About")
+                                " | " (a ((href "https://github.com/gersteni")) "Site's source code")
+                                " | " (a ((href "http://www.idoh.com")) "blog"))))
+
 
 (provide (all-defined-out))

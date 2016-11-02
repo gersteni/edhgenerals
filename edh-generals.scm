@@ -19,6 +19,12 @@
                  (("") main)
                  (("about") about-page)
 
+                 (("white-blue-black-red-generals") wubr-gens)
+                 (("blue-black-red-green-generals") ubrg-gens)
+                 (("black-red-green-white-generals") brgw-gens)
+                 (("red-green-white-blue-generals") rgwu-gens)
+                 (("green-white-blue-black-generals") gwub-gens)
+
                  (("red-generals") red-gens)
                  (("green-generals") green-gens)
                  (("white-generals") white-gens)
@@ -119,6 +125,12 @@
 (define (colorless-gens req) (make-gen-page "COLORLESS" req))
 
 
+(define (wubr-gens req) (make-gen-page "WUBR" req))
+(define (ubrg-gens req) (make-gen-page "UBRG" req))
+(define (brgw-gens req) (make-gen-page "BRGW" req))
+(define (rgwu-gens req) (make-gen-page "RGWU" req))
+(define (gwub-gens req) (make-gen-page "GWUB" req))
+
 
 (define (make-gen-page color req)
 
@@ -140,9 +152,6 @@
 
          (meta ((http-equiv "X-UA-Compatible")
                 (content "IE=edge")))
-
-         
-    
 
          ;; removing sharethis stuff for now, it will better to have it on the bottom
          ,insertbootstrap ;;,insertsharethis1 ,insertsharethis2
@@ -212,42 +221,82 @@
 
 
 
-(define (make-color-link1 a)
-  `(div ((class "colorlink"))
-             (a ((href ,(string-append "/" a "-generals")))
-                (img ((src ,(string-append "/img/" a ".png"))))
-                (br)
-                ,(string-append a))))
 
-(define (make-color-link2 a b)
-  `(div ((class "colorlink"))
-             (a ((href ,(string-append "/" a "-" b "-generals")))
-                (img ((src ,(string-append "/img/" a ".png"))))
-                (img ((src ,(string-append "/img/" b ".png"))))
-                (br)
-                ,(string-append a "-" b))))
+;; (interleave " + " "red" "green") -> "red + green"
 
-(define (make-color-link3 a b c)
-  `(div ((class "colorlink"))
-             (a ((href ,(string-append "/" a "-" b "-" c "-generals")))
-                (img ((src ,(string-append "/img/" a ".png"))))
-                (img ((src ,(string-append "/img/" b ".png"))))
-                (img ((src ,(string-append "/img/" c ".png"))))
-                (br)
-                ,(string-append a "-" b "-" c))))
+(define (interleave divider . strings)
+  (string-append
+    (if (eq? 1 (length strings))
+      (car strings)
+      (string-append (car strings)
+                     divider
+                     (apply interleave divider (cdr strings))))))
+
+
+(define (make-color-link . colors)
+  `(a ((href ,(string-append "/"
+                             (apply interleave "-" colors)
+                             "-generals")))
+      (span ((class "label label-primary colorlink"))
+
+            ,@(map (lambda (color)
+                     `(img ((src ,(string-append "/img/" color ".png")))))
+                   colors))))
+
+
 
 (define (make-color-link5)
-  `(div ((class "colorlink"))
-             (a ((href "/rainbow-generals"))
-                (img ((src "/img/white.png")))
-                (img ((src "/img/blue.png")))
-                (img ((src "/img/black.png")))
-                (img ((src "/img/red.png")))
-                (img ((src "/img/green.png")))
-                (br)
-                "rainbow")))
+  `(a ((href "/rainbow-generals"))
+      (span ((class "label label-primary colorlink"))
+            (img ((src "/img/white.png")))
+            (img ((src "/img/blue.png")))
+            (img ((src "/img/black.png")))
+            (img ((src "/img/red.png")))
+            (img ((src "/img/green.png")))
+            )))
+
+                ;; "rainbow")))
+
+(define color-ids
+  '(("white")
+    ("blue")
+    ("black")
+    ("red")
+    ("green")
+
+    ("white" "blue")
+    ("blue" "black")
+    ("black" "red")
+    ("red" "green")
+    ("green" "white")
 
 
+    ("white" "black")
+    ("blue" "red")
+    ("black" "green")
+    ("red" "white")
+    ("green" "blue")
+
+    ("green" "white" "blue")
+    ("white" "blue" "black")
+    ("blue" "black" "red")
+    ("black" "red" "green")
+    ("red" "green" "white")
+
+    ("white" "black" "green")
+    ("blue" "red" "white")
+    ("black" "green" "blue")
+    ("red" "white" "black")
+    ("green" "blue" "red")
+
+
+    ("white" "blue" "black" "red")
+    ("blue" "black" "red" "green")
+    ("black" "red" "green" "white")
+    ("red" "green" "white" "blue")
+    ("green" "white" "blue" "black")
+
+    ("colorless")))
 
 
 (define (make-index-page req)
@@ -255,94 +304,34 @@
     `(html
        (head
 
-         (meta ((charset "utf-8")))
+         ,charset ,viewport ,http-equiv ,insertbootstrap  ,insertGA ,stylesheet
 
-         ;; using the viewport recommendation from https://developers.google.com/speed/docs/insights/ConfigureViewport
-         (meta ((name "viewport")
-                (content "width=device-width, initial-scale=1")))
-
-         (meta ((http-equiv "X-UA-Compatible")
-                (content "IE=edge")))
-
-
-         ;; removing sharethis stuff for now, it will better to have it on the bottom
-         ,insertbootstrap  ,insertGA 
-         (link ((rel "stylesheet") (href "style.css")))
-         
          (title "EDH Generals"))
+
        (body (div ((class "container main"))
+
                   (div ((class "row"))
                        (div ((class "col-md-12"))
+
                             (h1 "EDH Generals")
-                            (p "Every EDH General printed from Alpha to Kaladesh.")
-                            (hr)))
+                            (p "Every EDH General ever printed from Alpha to Commander 2016. Tap on the links to find generals by their color identity.")
 
-                  (div ((class "row"))
-                       (div ((class "col-md-12"))
 
-                            (br)
-                            
-                            ,(make-color-link1 "white")
-                            ,(make-color-link1 "blue")
-                            ,(make-color-link1 "black")
-                            ,(make-color-link1 "red")
-                            ,(make-color-link1 "green")
+                            ,@(map (lambda (x)
+                                     (apply make-color-link x))
+                                   color-ids)
 
-                            (br)
-
-                            ,(make-color-link2 "white" "blue")
-                            ,(make-color-link2 "blue" "black")
-                            ,(make-color-link2 "black" "red")
-                            ,(make-color-link2 "red" "green")
-                            ,(make-color-link2 "green" "white")
-
-                            (br)
-
-                            ,(make-color-link2 "white" "black")
-                            ,(make-color-link2 "blue" "red")
-                            ,(make-color-link2 "black" "green")
-                            ,(make-color-link2 "red" "white")
-                            ,(make-color-link2 "green" "blue")
-
-                            (br)
-
-                            ,(make-color-link3 "green" "white" "blue")
-                            ,(make-color-link3 "white" "blue" "black")
-                            ,(make-color-link3 "blue" "black" "red")
-                            ,(make-color-link3 "black" "red" "green")
-                            ,(make-color-link3 "red" "green" "white")
-
-                            (br)
-
-                            ,(make-color-link3 "white" "black" "green")
-                            ,(make-color-link3 "blue" "red" "white")
-                            ,(make-color-link3 "black" "green" "blue")
-                            ,(make-color-link3 "red" "white" "black")
-                            ,(make-color-link3 "green" "blue" "red")
-
-                            (br)
-                            ,(make-color-link1 "colorless")
                             ,(make-color-link5)
 
-                            ))
+                            (h2 ,(string-append "There are  " 
 
+                                                (number->string (length (get-cards-by-cid "COLORLESS")))
+                                                " "
+                                                "COLORLESS commander generals."))
 
+                            ,(print-color "COLORLESS")))
 
-
-
-
-
-                  (div ((class "row"))
-
-                       (div ((class "col-md-12"))
-                            (hr)
-                            "Say hi at  " 
-                            (a ((href "https://twitter.com/idoh")) "@idoh")
-                            " and "
-                            (a ((href "https://plus.google.com/+IdohGerstenx")) "Google+")
-                            " | " (a ((href "/about")) "About")
-                            " | " (a ((href "https://github.com/gersteni")) "Site's source code")
-                            " | " (a ((href "http://www.idoh.com")) "blog"))))))))
+                  ,index-footer)))))
 
 
 (define (gogo) 

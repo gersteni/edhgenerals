@@ -222,5 +222,27 @@
   (hash-set! (hash-ref edhdb name) 'mid mid))
 
 
+;; (interleave " + " "red" "green") -> "red + green"
+
+(define (interleave divider . strings)
+  (string-append
+    (if (eq? 1 (length strings))
+      (car strings)
+      (string-append (car strings)
+                     divider
+                     (apply interleave divider (cdr strings))))))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
